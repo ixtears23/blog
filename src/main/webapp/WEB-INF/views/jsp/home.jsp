@@ -1,24 +1,59 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
-<script type="text/javascript">
+<script>
+	"use strict";
 
 	$(function() {
 		
-		console.log('start');
+		
+		var csrf = $("meta[name='_csrf']").attr("content");
+		var csrfHeader = $("meta[name='_csrf_header']").attr("content");
+		
+		
+		$(".post-title").click(function(e) {
+			e.preventDefault();
+			
+		})
+		
 		
 	})
-
+	
+	
+	function sendBody() {
+		
+		var options = {
+				method: "POST",
+				url: "http://localhost:8081/responseBody",
+				data: { param: "파람값", params: "파람스값"}
+		};
+		
+		$.ajax(options);
+		
+	}
+	
+	function sendEntity() {
+		
+		var options = {
+				method: "POST",
+				url: "http://localhost:8081/responseEntity",
+				data: { param: "파람값", params: "파람스값"}
+		};
+		
+		$.ajax(options);
+	}
 
 </script>
 
+<form name="csrf" method="post">
+<input type="hidden"
+    name="${_csrf.parameterName}"
+    value="${_csrf.token}"/>
+</form>
 
 <!-- Main Content -->
 <div class="container">
   <div class="row">
     <div class="col-lg-8 col-md-10 mx-auto">
       <div class="post-preview">
-        <a href="post.html">
+        <a href="">
           <h2 class="post-title">
           	${serverTime}
             Man must explore, and this is exploration at its greatest
@@ -28,12 +63,12 @@
           </h3>
         </a>
         <p class="post-meta">Posted by
-          <a href="#">Start Bootstrap</a>
+          <a href="">Start Bootstrap</a>
           on September 24, 2018</p>
       </div>
       <hr>
       <div class="post-preview">
-        <a href="post.html">
+        <a href="post">
           <h2 class="post-title">
             I believe every human has a finite number of heartbeats. I don't intend to waste any of mine.
           </h2>
