@@ -1,12 +1,10 @@
 
-# junseok.blog
+# recipe
 
 - java 1.8  
 - tiles3.0.8  
-- spring 5.1.1.RELEASE  
-- Filter  
-- OncePerRequestFilter  
-- HandlerInterceptorAdapter  
+- spring 5.1.3.RELEASE  
 - log4j  
-- bootstrap
-- jquery
+- web.xml ¾øÀ½.
+- servlet 4.0.1
+- only java config
