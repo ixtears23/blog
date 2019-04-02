@@ -1,65 +1,55 @@
 package com.junseok.blog.home.controller;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInfo;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
-import com.junseok.blog.home.service.MyService;
 
-
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration("servlet-context.xml")
+@SpringJUnitWebConfig(locations = "servlet-context.xml")
 public class HomeControllerTest {
 	
-	@Autowired
-	private MyService myService;
-
-	@BeforeAll
-	static void initAll() {
-		System.out.println("---Inside initAll---");
+	private MockMvc mockMvc;
+	
+	void setup(WebApplicationContext wac) {
+		this.mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
 	}
-
+	
 	@BeforeEach
-	void init(TestInfo testInfo) {
-		System.out.println("Start..." + testInfo.getDisplayName());
+	void setup() {
+		this.mockMvc = MockMvcBuilders.standaloneSetup(new HomeController()).build();
 	}
-
+	
+	void testHome() throws Exception {
+		this.mockMvc.perform(get("/home.do"))
+			.andExpect(status().isOk())
+			.andExpect(view().name("home"))
+			.andDo(MockMvcResultHandlers.print())
+			.andReturn();
+	}
+	
 	@Test
-	public void messageTest() {
-		String msg = myService.getMessage();
-		assertEquals("Hello World!", msg);
+	public void testMessage() throws Exception {
+		this.mockMvc.perform(get("/message")).andExpect(status().isOk())
+				.andExpect(content().string("Test Message Success!"))
+				.andDo(MockMvcResultHandlers.print());
 	}
-
-	@Test
-	public void multiplyNumTest() {
-		int val = myService.multiplyNum(5, 10);
-		assertEquals(50, val);
-	}
-
-	@Test
-	public void idAvailabilityTest() {
-		boolean val = myService.isIdAvailable(100);
-		assertTrue(val);
-	}
-
-	@AfterEach
-	void tearDown(TestInfo testInfo) {
-		System.out.println("Finished..." + testInfo.getDisplayName());
-	}
-
-	@AfterAll
-	static void tearDownAll() {
-		System.out.println("---Inside tearDownAll---");
+	
+	void getAjax() throws Exception {
+		this.mockMvc.perform(get("/home.do").accept(MediaType.parseMediaType(MediaType.APPLICATION_JSON_UTF8_VALUE)))
+		.andExpect(status().isOk())
+		.andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+		.andExpect(jsonPath("$.name").value("Lee"));
 	}
 
 }
