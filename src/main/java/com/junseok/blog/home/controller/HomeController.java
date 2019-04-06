@@ -7,10 +7,12 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
@@ -59,7 +61,7 @@ public class HomeController {
 	}
 	
 	
-	@RequestMapping(value="/responseBody", method=RequestMethod.GET)
+	@RequestMapping(value="/responseBody", method=RequestMethod.POST)
 	public @ResponseBody Map<String, Object> responseBody(HttpServletRequest request, ModelAndView mav, @RequestBody Map<String, Object> params) {
 		
 		logger.info("responseBody");
@@ -75,16 +77,24 @@ public class HomeController {
 		return map;
 	}
 	
-	@RequestMapping(value="/responseEntity", method=RequestMethod.POST)
-	public ResponseEntity<Object> responseEntity(HttpServletRequest request, ModelAndView mav, @RequestParam String param) {
+	@RequestMapping(value="/responseEntity", method=RequestMethod.GET)
+	public ResponseEntity<Object> responseEntity(HttpServletRequest request, HttpServletResponse res, ModelAndView mav, @RequestParam String param) {
 		
 		logger.info("responseEntity");
 		logger.info("param ::: {}", param);
+		logger.info("ModelAndView ::: {}", mav);
 		
-		MultiValueMap<String, Object> header = new LinkedMultiValueMap<String, Object>();;
-		ResponseEntity<Object> response = new ResponseEntity<Object>(header, HttpStatus.OK);
+		MultiValueMap<String, Object> body = new LinkedMultiValueMap<String, Object>();
+		body.add("param", param);
+		body.add("param2", param);
+		body.add("param3", param);
+		body.add("param4", param);
+		res.setContentType("UTF-8");
 		
-		return response;
+		
+//		ResponseEntity<Object> response = new ResponseEntity<Object>(header, HttpStatus.OK);
+		
+		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON_UTF8).body(body);
 		
 	}
 	
