@@ -1,6 +1,7 @@
 package com.junseok.blog.home.controller;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +21,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,6 +38,14 @@ import org.springframework.web.servlet.ModelAndView;
 public class HomeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+	
+    @InitBinder 
+    public void initBinder(WebDataBinder binder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(false);
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
+    }
+	
 	
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -61,8 +73,15 @@ public class HomeController {
 	}
 	
 	
-	@RequestMapping(value="/responseBody", method=RequestMethod.POST)
-	public @ResponseBody Map<String, Object> responseBody(HttpServletRequest request, ModelAndView mav, @RequestBody Map<String, Object> params) {
+	/*
+	 * Request Haeders
+	 *  - Content-Type: application/x-www-form-urlencoded;charset=UTF-8
+	 *
+	 * Response Headers
+	 *  - application/json;charset=UTF-8
+	 */
+	@RequestMapping(value="/sendBody", method=RequestMethod.POST)
+	public @ResponseBody Map<String, Object> sendBody(HttpServletRequest request, ModelAndView mav, @RequestBody MultiValueMap<String, Object> params) {
 		
 		logger.info("responseBody");
 		logger.info("params ::: {}", params);
@@ -77,8 +96,15 @@ public class HomeController {
 		return map;
 	}
 	
-	@RequestMapping(value="/responseEntity", method=RequestMethod.GET)
-	public ResponseEntity<Object> responseEntity(HttpServletRequest request, HttpServletResponse res, ModelAndView mav, @RequestParam String param) {
+	/*
+	 * Request Haeders
+	 *  - Content-Type: application/x-www-form-urlencoded;charset=UTF-8
+	 *
+	 * Response Headers
+	 *  - application/json;charset=UTF-8
+	 */
+	@RequestMapping(value="/sendEntity", method=RequestMethod.POST)
+	public ResponseEntity<Object> sendEntity(HttpServletRequest request, HttpServletResponse res, ModelAndView mav, @RequestParam String param) {
 		
 		logger.info("responseEntity");
 		logger.info("param ::: {}", param);
@@ -95,7 +121,6 @@ public class HomeController {
 //		ResponseEntity<Object> response = new ResponseEntity<Object>(header, HttpStatus.OK);
 		
 		return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON_UTF8).body(body);
-		
 	}
 	
 }

@@ -78,6 +78,20 @@
 	
 	<script>
 		"use strict";
+		
+		var kriss = {};
+		kriss.ui = {};
+
+		if (kriss.ui.grid === undefined) {
+		    kriss.ui.grid = {};
+
+		    (function () {
+		    	kriss.ui.grid = function (inParams) {
+		        };
+
+		    })(kriss.ui.grid)
+		}
+
 	
 		$(function() {
 			
@@ -99,9 +113,14 @@
 			
 			var options = {
 					type: "POST",
-					url: "/responseBody",
-					data: { params: { param: "파람스값", params: "파람스값"} },
-					contentType: "application/json",
+					url: "/sendBody",
+					data: {
+						  "firstName":"Sergey",
+						  "lastName":"Kargopolov",
+						  "email":"test9@test.com",
+						  "password":"123"
+						},
+					contentType: "application/x-www-form-urlencoded;charset=UTF-8",
 					success: function(res) {
 						console.log(res);
 					}
@@ -114,9 +133,9 @@
 		function sendEntity() {
 			
 			var options = {
-					method: "GET",
-					url: "/responseEntity",
-					data: { param: "파람스값", params: "파람스값"},
+					method: "POST",
+					url: "/sendEntity",
+					data: { param: new Date(), params: "파람스값"},
 					success: function(res) {
 						console.log(res);
 					}
