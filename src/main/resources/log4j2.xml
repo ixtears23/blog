@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="Console %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+    </Console>
+    <Console name="ConsoleSubOne" target="SYSTEM_OUT">
+      <PatternLayout pattern="ConsoleSubOne %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+    </Console>
+    <Console name="ConsoleSubTwo" target="SYSTEM_OUT">
+      <PatternLayout pattern="ConsoleSubTwo %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+    </Console>
+    <Console name="RootConsole" target="SYSTEM_OUT">
+      <PatternLayout pattern="RootConsole %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+    </Console>
+  </Appenders>
+  <Loggers>
+  	<Logger name="com.junseok.blog.Myapp" level="debug" additivity="false">
+  		<AppenderRef ref="Console"/>
+  	</Logger>
+  	<Logger name="com.junseok.blog" level="debug" additivity="false">
+  		<AppenderRef ref="Console"/>
+  	</Logger>
+  	<Logger name="com.junseok.blog.MyAppSubOne" level="info" additivity="false">
+  		<AppenderRef ref="ConsoleSubOne"/>
+  	</Logger>
+  	<Logger name="com.junseok.blog.MyAppSubTwo" level="warn" additivity="false">
+  		<AppenderRef ref="ConsoleSubTwo"/>
+  	</Logger>
+    <Root level="error">
+      <AppenderRef ref="RootConsole"/>
+    </Root>
+  </Loggers>
+</Configuration>
